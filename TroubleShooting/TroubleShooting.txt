@@ -1,0 +1,3 @@
+UserWidget C++ 파일 생성 후 빌드가 실패함
+Build.cs 파일에 "UMG" 추가를 해야 UMG관련 내용 사용이 가능해짐.
+https://docs.unrealengine.com/4.27/ko/ProgrammingAndScripting/ProgrammingWithCPP/CPPTutorials/UMG/1/
