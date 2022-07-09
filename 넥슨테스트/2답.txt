@@ -1,0 +1,193 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+
+
+/*
+ * Complete the 'closestStraightCity' function below.
+ *
+ * The function is expected to return a STRING_ARRAY.
+ * The function accepts following parameters:
+ *  1. STRING_ARRAY c
+ *  2. INTEGER_ARRAY x
+ *  3. INTEGER_ARRAY y
+ *  4. STRING_ARRAY q
+ */
+struct Point{
+    int x, y;
+};
+
+float Distance(const Point& p1, const Point& p2)
+{
+    float xPow = (p1.x - p2.x) * (p1.x - p2.x);
+    float yPow = (p1.y - p2.y) * (p1.y - p2.y);
+    float distance = sqrt(xPow + yPow);
+    
+    if((p1.x != p2.x) && (p1.y != p2.y))
+    {
+        distance = -1;
+    }
+    
+    return distance;    
+}
+
+vector<string> closestStraightCity(vector<string> c, vector<int> x, vector<int> y, vector<string> q) {
+    int cityCount = c.size();
+
+    vector<Point> cityPoint(cityCount);
+    vector<string> resultVec;
+
+    vector<float> cityDistance(cityCount, -1);
+
+    for (int i = 0; i < cityCount; i++)
+    {
+        // 도시 별로 Point분류
+        cityPoint[i].x = x[i];
+        cityPoint[i].y = y[i];
+    }
+
+    for (int i = 0; i < cityCount; i++)
+    {
+        
+        for (int j = 0; j < cityCount; j++)
+        {
+            if (i != j)
+            {
+                cityDistance[j] = Distance(cityPoint[i], cityPoint[j]);
+            }
+            else
+                cityDistance[j] = -1;
+        }
+
+        float result = *max_element(cityDistance.begin(), cityDistance.end());
+
+        if (result == -1)
+            resultVec.push_back("NONE");
+        else
+        {
+            for (int k = 0; k < cityCount; k++)
+            {
+                if (cityDistance[k] != -1 && result > cityDistance[k])
+                {
+                    result = cityDistance[k];
+
+                    resultVec.push_back(c[k]);
+                }
+
+                if (k == cityCount - 1 && result == *max_element(cityDistance.begin(), cityDistance.end()))
+                {
+                    int MaxIndex = max_element(cityDistance.begin(), cityDistance.end()) - cityDistance.begin();
+
+                    resultVec.push_back(c[MaxIndex]);
+                }
+            }
+        }
+    }
+
+    return resultVec;
+}
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string c_count_temp;
+    getline(cin, c_count_temp);
+
+    int c_count = stoi(ltrim(rtrim(c_count_temp)));
+
+    vector<string> c(c_count);
+
+    for (int i = 0; i < c_count; i++) {
+        string c_item;
+        getline(cin, c_item);
+
+        c[i] = c_item;
+    }
+
+    string x_count_temp;
+    getline(cin, x_count_temp);
+
+    int x_count = stoi(ltrim(rtrim(x_count_temp)));
+
+    vector<int> x(x_count);
+
+    for (int i = 0; i < x_count; i++) {
+        string x_item_temp;
+        getline(cin, x_item_temp);
+
+        int x_item = stoi(ltrim(rtrim(x_item_temp)));
+
+        x[i] = x_item;
+    }
+
+    string y_count_temp;
+    getline(cin, y_count_temp);
+
+    int y_count = stoi(ltrim(rtrim(y_count_temp)));
+
+    vector<int> y(y_count);
+
+    for (int i = 0; i < y_count; i++) {
+        string y_item_temp;
+        getline(cin, y_item_temp);
+
+        int y_item = stoi(ltrim(rtrim(y_item_temp)));
+
+        y[i] = y_item;
+    }
+
+    string q_count_temp;
+    getline(cin, q_count_temp);
+
+    int q_count = stoi(ltrim(rtrim(q_count_temp)));
+
+    vector<string> q(q_count);
+
+    for (int i = 0; i < q_count; i++) {
+        string q_item;
+        getline(cin, q_item);
+
+        q[i] = q_item;
+    }
+
+    vector<string> result = closestStraightCity(c, x, y, q);
+
+    for (int i = 0; i < result.size(); i++) {
+        fout << result[i];
+
+        if (i != result.size() - 1) {
+            fout << "\n";
+        }
+    }
+
+    fout << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
