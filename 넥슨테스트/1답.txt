@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+
+
+/*
+ * Complete the 'reciprocal' function below.
+ *
+ * The function accepts INTEGER N as parameter.
+ */
+
+void reciprocal(int N) {
+    int start, finish, index = 0;
+    int cycle = 1;
+    int num[100001];
+    
+    memset(num, -1, sizeof(num));
+    
+    cout << (cycle / N) << ".";
+    
+    int temp = cycle % N * 10;
+    
+    while(true)
+    {
+        cycle = cycle % N * 10;
+        if(num[cycle] != -1)
+        {
+            start = num[cycle];
+            finish = index;
+            break;
+        }
+        
+        num[cycle] = index++;
+    }
+    
+    for(int i = 0; i < start; i++)
+    {
+        cout << (temp / N);
+        temp = temp % N * 10;
+    }
+    
+     for(int i = start; i < finish; i++)
+    {
+        cout << (temp / N);
+        temp = temp % N * 10;
+    }
+    
+    cout << " ";
+    
+     for(int i = start; i < finish; i++)
+    {
+        cout << (temp / N);
+        temp = temp % N * 10;
+    }
+}
+int main()
+{
+    string N_temp;
+    getline(cin, N_temp);
+
+    int N = stoi(ltrim(rtrim(N_temp)));
+
+    reciprocal(N);
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
